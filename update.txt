@@ -368,8 +368,9 @@
   },
   "aShemaleTube-x-p": {
     "link": "^(?:[a-z]*\\.)*ashemaletube\\.com\\/videos\\/\\d+\\/[\\w\\-\\/?=&]+",
-    "res": "<source src=\"([^\"]+)",
-    "note": "DracoSerge\nhttps://www.reddit.com/r/imagus/comments/150zrnk/nsfw_i_want_to_share_sieves_some_i_made_and_some/\n\n!!!\nno album support:\nhttps://www.ashemaletube.com/pics/cartoon/best-recent/\n\n\nEXAMPLES\nhttps://www.ashemaletube.com/videos/big-cock/best-recent/\nhttps://www.ashemaletube.com/model/domino-presley-796/"
+    "loop": 1,
+    "res": ":\nthis.TRG.IMGS_ext_data = [\n  '//' + 'data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"640\" height=\"360\"></svg>',\n  `<imagus-extension type=\"videojs\" url=\"${$._.match(/\"src\":\"([^\"]+)/)?.[1].replace(/\\\\/g,'')+'#.m3u8'}\"></imagus-extension>`\n]\nreturn 'imagus://extension'",
+    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nz4rch3\nOLD\nhttps://www.reddit.com/r/imagus/comments/150zrnk/nsfw_i_want_to_share_sieves_some_i_made_and_some/"
   },
   "ASK.fm": {
     "useimg": 1,
@@ -772,7 +773,7 @@
     "to": "$11000x1000",
     "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/landzre\nOLD\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1600#4\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1200#13\n\n\n\nEXAMPLES\nhttps://www.computeruniverse.net/ru/c/noutbuki-planshety-i-pk/bloknoty-i-aksessuary\nhttps://www.computeruniverse.net/en/c/hardware-components/solid-state-drives-ssd"
   },
-  "Coomer|Kemono|Nekohouse-x-q-p": {
+  "Coomer|Kemono|Nekohouse-x-q": {
     "link": "^((?:beta\\.)?((?:kemono|coomer|nekohouse)\\.(?:cr|s[tu])))(/[^/]+/user/[^/]+/post/[\\w-]+).*",
     "url": ": ($[2][0]!=='n'?'data:,':'')+$[0]",
     "res": ":\nconst low_resolution_first = false\n\nif($[2][0]==='n'){\nconst t=$._.match(/\"post__content\">\\n<pre>(.+?)<\\/pre>/s)?.[1]||'';\nconst m=[...$._.matchAll(/(?:class=\"fileThumb\"[^\\w]+href|src(?==\"[^>]+type=\"video\\/[^\"]{3,4}\"))=\"([^\"]+)\"(?:[^>]+>[^>]+src=\"([^\"]+))?/g)].map((i,n)=>[[(!low_resolution_first?'#':'')+i[1]?.replace(/^\\/[^\\/]/,'//'+$[1]+'$&'),(!low_resolution_first?'':'#')+i[2]?.replace(/^\\/[^\\/]/,'//'+$[1]+'$&')],!n?t:'']);\nthis.CNT.filename=$._.match(/href=\"\\/[^\\/]+\\/user\\/\\d+\">\\n\\s+(\\S+)/s)?.[1]+'_'+m[0]?.[0]?.[0].match(/([\\w-]+)\\.[^\\/]+$/)[1];\nreturn m\n}\nlet res=[];\nconst img = (s,m,v=false) => {\nconst l=low_resolution_first, u=s+'/data'+m;\nreturn v ? [u+'#mp4',u+'#mp3'] : [(l?'':'#')+u,!/\\.gif/.test(u)&&(l?'#':'')+'//img.'+$[2]+'/thumbnail/data'+m];\n}\nconst x=new XMLHttpRequest();\nx.open('GET',`https://${$[1]}/api/v1${$[3]}#kemono_header`,false);\nx.setRequestHeader('accept','text/css');\nx.send();\n$._=x.responseText;\n$._=JSON.parse($._);\n$._.attachments?.forEach(i=>i.server&&i.path&&!/^\\.(?:7z|bin|docx?|pdf|rar|txt|zip)/.test(i.extension)&&res.push([img(i.server,i.path,true)]));\nif($._.post?.embed?.url?.length&&!res.length)return {loop:$._.post.embed.url};\n$._.previews?.forEach(i=>i.server&&i.path&&res.push([img(i.server,i.path)]));\n$._=$._.post;\nif(res[0])res[0][1]=[($._.published?'Publish':'Add')+'ed '+new Date($._.published||$._.added).toLocaleString(),$._.content||'',$._.tags&&'Tags:[ '+$._.tags?.join(', ')+' ]'].filter(Boolean).join(' | ');\n[...$._.content?.matchAll(/ src=\"([^\"]+)/g)||[]].forEach(i=>res.push([i[1],$._.content.replace(/<[^>]+>/g,' ')]));\nlet n=document.querySelector('span[itemprop=\"name\"]')?.textContent;\nif(!n){\ntry{\nconst x=new XMLHttpRequest();\nx.open('GET',`https://${$[2]}/api/v1/${$._.service}/user/${$._.user}/profile`,false);\nx.send();\nn=JSON.parse(x.responseText).name;\n}catch(e){}\n}\nthis.CNT.filename=(n||$._.user).replace(/[^\\w.-]/g,'_')+' - '+$._.title?.replace(/[^\\w.-]/g,'_')||'';\nreturn res",
@@ -1539,10 +1540,10 @@
   "Gazeta.ru-m": {
     "link": "^(?:gazeta\\.ru/(?:(?:[^/]+/){2}\\d{4}/\\d{2}/\\d{2}/\\d+\\.shtml|(photo/\\d+/.+))|gazeta-ru-video/(.+))",
     "url": ": $[2]?`//api.vp.rambler.ru/api/v3/records/getPlayerData?params=%7B%22uuid%22%3A%22${$[2]}%22%7D`:$[0]",
-    "res": ":\nif($[1])return [...$._.matchAll(/data-hq=\"([^\"]+)/g)].map(i=>[i[1]]);\nif(!$[2]){\nconst m=$._.match(/data-hq='([^']+)/);\nif(m)return m[1];\nconst id=$._.match(/data-id='([^']+)/);\nreturn id?{loop:'//gazeta-ru-video/'+encodeURIComponent(id[1])}:''; \n}\n$=JSON.parse($._).result?.playList?.source;\nreturn $?{loop:$}:''",
+    "res": ":\nif($[1])return [...$._.matchAll(/data-hq=\"([^\"]+)/g)].map(i=>[i[1]]);\nif(!$[2]){\nconst m=$._.match(/<img src=\"([^\"]+)\"\\nclass=\"hd\"/);\nif(m)return m[1];\nconst id=$._.match(/data-id='([^']+)/);\nreturn id?{loop:'//gazeta-ru-video/'+encodeURIComponent(id[1])}:''; \n}\n$=JSON.parse($._).result?.playList?.source;\nreturn $?{loop:$}:''",
     "img": "^(img\\.gazeta\\.ru/files\\d+/\\d+/\\d+/).+",
     "to": ":\nreturn document.querySelector(`img[data-hq^=\"https://${$[1]}\"]`)?.getAttribute('data-hq')||$[0]",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/my7w9qe/\nOLD\nhttps://www.reddit.com/r/imagus/comments/1iklqrk/comment/mbzqaxv\n\n!!!\nДля увеличения фото (нижний ряд) в галереях необходимо добавить фильтр в uBO (подробнее см. п.13 ЧаВо):\ngazeta.ru##.zoombtn\n\n\nПРИМЕРЫ\nhttps://www.gazeta.ru/news/\nhttps://www.gazeta.ru/photo/20282924/natalya-fateeva-bday-90.shtml"
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nxyp8es\nOLD\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/my7w9qe/\nhttps://www.reddit.com/r/imagus/comments/1iklqrk/comment/mbzqaxv\n\n!!!\nДля увеличения фото (нижний ряд) в галереях необходимо добавить фильтр в uBO (подробнее см. п.13 ЧаВо):\ngazeta.ru##.zoombtn\n\n\nПРИМЕРЫ\nhttps://www.gazeta.ru/news/\nhttps://www.gazeta.ru/photo/20282924/natalya-fateeva-bday-90.shtml"
   },
   "Geekpic|Pic4Net-h": {
     "link": "pic4net\\.com|geekpic\\.net/pm-\\w+\\.html",
@@ -1697,13 +1698,13 @@
     "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1iwujz1/comment/meuwlhy\nOLD\nhttps://www.reddit.com/r/imagus/comments/1iwujz1/comment/meo49i5\nhttps://www.reddit.com/r/imagus/comments/1bercv8/comment/l7svfya\n\n\n!!!\nДля просмотра альбомов курсор нужно наводить на дату.\n==\nYou have to hover over the date to view albums.\n\n\nEXAMPLES\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1360#11"
   },
   "GooglePlay-p": {
-    "link": "^playstorealbum/[^!]+!(.+)",
-    "url": "data:,$&",
-    "res": ":\nreturn $[1].split('!').map(i=>[['#'+i+'s0',i+'s1024']])",
+    "link": "^(?:playstorealbum/(\\d+)!(.+)|play\\.google\\.com/store/apps/details\\?id=.+)",
+    "url": ": ($[1]?'data:,':'')+$[0]",
+    "res": ":\nif($[1]){\n var i=Number($[1]), $=$[2].split('!')\n return {\"\":$.map(i=>[['#'+i+'s0',i+'s1024']]),idx:i}\n}\nreturn [...$._.matchAll(/(?:<source|\"Atcj9b\"><img) src=\"([^\"]+)/g)].map(i=>[[i[1].replace(/=.+/,'=s0'),i[1].replace(/=.+/,'=s1024')]])",
     "img": "^(play-lh\\.googleusercontent\\.com/[^=]+=).*",
     "loop": 2,
-    "to": ":\nconst show_thumbnail_gallery = true\nconst truncate_album = true\n\nconst n=this.node;\nif(show_thumbnail_gallery&&n.className===\"T75of B5GQxf\"){\nconst num=n.attributes?.['data-screenshot-index']?.value;\nreturn '//playstorealbum/'+$[1]+'!'+[...n.offsetParent?.querySelectorAll('img')].filter((i,n)=>n>=(truncate_album&&Number(num)||0)).map(i=>i.src.match(/^[^=]+=/)[0]).join('!')\n}\nreturn $[1]+'s0\\n'+$[1]+'s1024'",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1bpg3s8/comment/kwxjhnb\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://play.google.com/store/apps/details?id=org.mozilla.firefox&pli=1"
+    "to": ":\nconst n=this.node;\nif(n.className==='T75of B5GQxf'){\nconst num=n.attributes?.['data-screenshot-index']?.value;\nreturn '//playstorealbum/'+num+'!'+[...n.offsetParent?.querySelectorAll('img')].map(i=>i.src.match(/^[^=]+=/)[0]).join('!')\n}\nreturn $[1]+'s0\\n'+$[1]+'s1024'",
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nzilek0\nOLD\nhttps://www.reddit.com/r/imagus/comments/1bpg3s8/comment/kwxjhnb\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://play.google.com/store/apps/details?id=org.mozilla.firefox&pli=1"
   },
   "Grailed-s": {
     "link": "^grailed\\.com/listings/",
@@ -2854,12 +2855,11 @@
     "note": "gpl2731\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1163&limit=1&m=1#1\nOLD\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=48222&start=3616#1\n\nEXAMPLES\nhttps://www.naughtyamerica.com/new-porn-videos"
   },
   "NaughtyMachinima-x-p": {
-    "link": "^(naughtymachinima\\.com/)(album|video)(/\\d+)/[\\w-]+",
-    "url": ": ($[2][0]==='v'?'data:,':'')+$[0]",
-    "res": ":\nif($[2][0]==='v'){\n const u=[`https://videos.${$[1]}media/${$[2]}s/h264${$[3]}_`,'0p.mp4']\n return [[['#'+u[0]+'108'+u[1],'#'+u[0]+'72'+u[1],u[0]+'48'+u[1],u[0]+'36'+u[1]]]]\n}\nreturn [...$._.matchAll(/<img src=\"([^\"]+)\" alt=\"[^\"]*\" id=\"/g)].map(i=>[i[1].replaceAll('/tmb/','/')])",
+    "link": "^naughtymachinima\\.com/(album|video)/\\d+/[\\w-]+",
+    "res": ":\nif($[1][0]==='v'){\n $=[...$._.matchAll(/<source src=\"([^\"]+)\"[^>]+res\\s*=\\s*[\"'](\\d+)/g)].sort((a,b)=>Number(b[2])-Number([a[2]]));\n return $.length ? [[['#'+$[0][1],$.pop()[1]]]] : ''\n}\nreturn [...$._.matchAll(/<img src=\"([^\"]+)\" alt=\"[^\"]*\" id=\"/g)].map(i=>[i[1].replaceAll('/tmb/','/')])",
     "img": "^(\\w+\\.naughtymachinima\\.com/media/photos/)tmb/",
     "to": "$1",
-    "note": ""
+    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nxeuanh\nOLD\nhttps://www.reddit.com/r/imagus/comments/1psydss/comment/nvihufo\n\nEXAMPLES\nvideos:\nhttps://www.naughtymachinima.com/videos?o=mr\nhttps://www.naughtymachinima.com/search/videos/red\nhttps://www.naughtymachinima.com/user/Soulslayerzx\nhttps://www.naughtymachinima.com/search/videos/hentai?page=336\nalbums:\nhttps://www.naughtymachinima.com/albums"
   },
   "NAVER_TV-h": {
     "link": "^(?:(?:m\\.)?tv\\.(naver\\.com/)v/(?:(\\d+)(?:$|[/?#])|([\\dA-F]+)/(\\w+)).*|apis\\.naver\\.com/rmcnmv/rmcnmv/vod/play/v2\\.0/.+)",
@@ -3190,11 +3190,11 @@
     "note": "gpl2731\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1120#13\nOLD\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=48222&start=3360\n\nEXAMPLES\nhttps://pbase.com/joshcruzphotos/my_country\nhttps://pbase.com/carol202/london_day_3"
   },
   "Pepper.ru-s": {
-    "link": "^pepper\\.ru/[a-z]+/[\\w-]+$",
-    "res": ":\nreturn JSON.parse($._.match(/window.__INITIAL_STATE__\\s*=\\s*(.+?);\\n/)[1]).threadDetail.galleryImages.map(i=>['//static.pepper.ru/'+i.path+'/'+i.name+'.jpg'])",
-    "img": "^(static\\.pepper\\.ru/threads/raw/\\w+/[\\d_]+)/re/\\d+x\\d+",
-    "to": "$1",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1akz6th/comment/kpbqh6b\n\n\n!!!\nКурсор наводить на название товара.\n\n\nПРИМЕРЫ\nhttps://www.pepper.ru/new\nhttps://www.pepper.ru/groups/phones"
+    "link": "^pepper\\.ru/[a-z]+/[\\w-]+-\\d+$",
+    "res": "data-image-original=\"([^\"]+)\n\"gtm-firstpost-link\">[^<]+</a>([^\\n]+)",
+    "img": "^(cdn\\d\\.pepper\\.ru/topics/photos/\\d+/)\\w+",
+    "to": "#$1original\n$1large",
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nxyp8es\nOLD\nhttps://www.reddit.com/r/imagus/comments/1akz6th/comment/kpbqh6b\n\n\n!!!\nКурсор наводить на название товара.\n\n\nПРИМЕРЫ\nhttps://www.pepper.ru/new\nhttps://www.pepper.ru/groups/phones"
   },
   "Perekrestok.ru-s": {
     "link": "^perekrestok\\.ru/cat/\\d+/\\w/[\\w-]+-\\d+$",
@@ -3213,13 +3213,13 @@
     "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/lgkwer7\nOLD\nhttps://www.reddit.com/r/imagus/comments/130svfu/comment/jyduj9s\n\n\nEXAMPLES\nhttps://www.performance-pcs.com/collections/logitech\nhttps://www.performance-pcs.com/collections/all-products-system-hardware-motherboards"
   },
   "PhoneArena": {
-    "link": "^phoenarenaalbum/(.+)",
-    "url": "data:,$1",
-    "res": ":\nreturn $[1].split(\"!\").map(i=>[i])",
+    "link": "^phonearenaalbum/([^!]+)!(.+)",
+    "url": "data:,$&",
+    "res": ":\nconst m=$[2].split('!'), i=m.indexOf($[1])\nreturn {\"\":m.map(i=>[i]),idx:i}",
     "img": "^([mi]-cdn\\.phonearena\\.com/images/)(?:((?:article|review)s/\\d+-)(?:gallery|image|\\d+)|(review/\\d+-[^_]+)_\\w+)(/[^/]+\\.(?:jpe?g|gif|png|webp))(?:\\?.+|$)",
     "loop": 2,
-    "to": ":\nlet n=this.node;\nn=$[2]&&n.srcset&&[...this.node.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.lastElementChild?.lastElementChild?.firstElementChild.children||[]].map(i=>i.firstElementChild.src?.replace(/-\\d+/,'-image')).join(\"!\");\nreturn n?.length?'phoenarenaalbum/'+n:$[2]?`//${$[1]}${$[2]}image${$[4]}`:'//'+$[1]+$[3]+$[4]",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/kuu2fo0\n\nEXAMPLES\nhttps://www.phonearena.com/reviews/galaxy-tab-s9-review_id5887\nhttps://www.phonearena.com/reviews/iphone-14-vs-galaxy-z-flip-4_id5509"
+    "to": ":\nlet n=this.node;\nn=$[2]&&n.srcset&&[...this.node.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.lastElementChild?.lastElementChild?.firstElementChild.children||[]].map(i=>i.firstElementChild.src?.replace(/-\\d+/,'-image')).join('!');\nreturn n?.length?'phonearenaalbum/https://'+$[0]+'!'+n:$[2]?`//${$[1]+$[2]}image${$[4]}`:'//'+$[1]+$[3]+$[4]",
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nzib5ae\nOLD\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/kuu2fo0\n\nEXAMPLES\nhttps://www.phonearena.com/reviews/galaxy-tab-s9-review_id5887\nhttps://www.phonearena.com/reviews/iphone-14-vs-galaxy-z-flip-4_id5509"
   },
   "Photo.net-g": {
     "link": "^photo\\.net/photo(?:db/photo\\?photo_id=|/)(\\d+).*",
@@ -3402,7 +3402,7 @@
     "to": ":\nvar i=$[1][0]=='i'\nreturn '//i.pximg.net/' + (i ? 'img-original' : $[1]) + $[2] + (i && $[3]=='.jpg' ? '.#jpg png gif#' : $[3])",
     "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/l7hxp8k\n\n\n!!!\n- для показа внешних ссылок необходимо правило для SMH (см.ЧаВо, п.12);\n- есть возможность включить по умолчанию загрузку изображений среднего качества (для тех у кого медленное соединение или прокси): const low_resolution_first = true;\n- анимация Ugoira на данный момент не поддерживается;\n- клавиша TAB также переключает качество изображения во всплывающем окне Имагус;\n- названия изображений сохраняются со страницы автора в формате [имя автора]__[название изображения].[расширение] при сохранении по горячей клавише. NB: включенные в браузере расширения менеджеров закачек (например, IDM) могут мешать работе фильтра;\n- NB! В настоящее время есть проблемы с сохранением контента при использовании хоткея в Chrome, рекомендуется использовать контекстное меню или сохранение перетаскиванием (зависит от браузера или стороннего расширения).\n==\n- To show external links, you need a rule for SMH (see FAQ, p.12);\n- There is an option to enable loading of medium quality images by default (for those with slow connections or proxies):\nconst low_resolution_first = true;\n- Ugoira animation is not supported at the moment;\n- The TAB key also toggles the image quality in the Imagus popup;\n- Image names are saved (via hotkey only) from the author's page in the format [author name]__[title].[ext]. NB: Download manager extensions (e.g., IDM) enabled in your browser may interfere with the sieves's operation;\n- NB! Currently there are problems with saving content when using hotkeys in Chrome, it is recommended to use context menu or drag and drop saving (depends on browser or third party extension).\n\n\nEXAMPLES\nhttps://www.reddit.com/domain/pixiv.net/new\nhttps://www.pixiv.net/en/tags/少女/artworks\nhttps://www.pixiv.net/en/users/41106591"
   },
-  "Pixnet-g": {
+  "Pixnet-g-p": {
     "img": "^(?:pic|s\\d?)(\\.pimg\\.tw/)(?:album/)?([^/]+)/(?:element/\\d+_)?([^/_]+)(?:/[^/]+/)?(?:_[nbstq]|\\d+x\\d+).+",
     "to": "#pic$1$2/$3.#jpg png#\npic$1$2/$3_b.#jpg png#",
     "note": "EXAMPLES\nhttps://www.pixnet.net/blog/articles/group/9/hot/4\nhttps://www.pixnet.net/blog/articles/group/2\nhttps://chill-tainan2022.events.pixnet.net"
@@ -3411,7 +3411,8 @@
     "img": "^imageproxy\\.pimg\\.tw/zoomcrop\\?url=([^&]+).*",
     "dc": 2,
     "loop": 2,
-    "to": "$1"
+    "to": "$1",
+    "note": ""
   },
   "Placeit-g": {
     "link": "^(?:recordit\\.co|placeit\\.net)/(?:\\w{10}|c/\\w+/stages/.+)",
@@ -3480,10 +3481,10 @@
     "res": ":\nif($._[0]!=='[')return {loop:$._.match(/\"mp4\",\"videoUrl\":\"([^\"]+)/)[1].replace(/\\\\/g,'')}\nreturn JSON.parse($._)[0].videoUrl",
     "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/14vub0r/comment/k0x2yh4\n\n!!!\nЭто альтернативный фильтр для PornHub (по умолчанию выключен). Если у пользователя возникли проблемы с основным правилом (PornHub_video-x-p), можно использовать его. \n+\nКурсор лучше наводить на название ролика.\n==\nThis is an alternative rule for PornHub (disabled by default). If the user has problems with the basic rule (PornHub_video-x-p), you can use it.\n+\nIt is better to hover the cursor over the name of the video.\n\n\nEXAMPLES\nhttps://www.pornhub.com/video?c=492\nhttps://pornhub.com/view_video.php?viewkey=646473788a36e\nhttps://www.pornhub.com/model/throatterroristxx\nhttps://rt.pornhub.com/channels/mylf"
   },
-  "PornWorld_trailer-x-q": {
-    "link": "^pornworld.com/watch/\\d+/.+",
-    "res": ":\nconst max_resolution = 1080;\n\nconst re = /source src=\"(?<url>.+?mp4.*?)\" size=\\\"(?<res>\\d+)\"/g\nconst mp4s = Array.from($._.matchAll(re))\n  .map(a => ({ res: Number(a.groups.res), url: a.groups.url }))\n  .filter(a => a.res <= max_resolution)\n  .sort((a, b) => a.res - b.res);\n\nreturn mp4s.pop()?.url || null;\n",
-    "note": "gpl2731\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=48222&start=3780#21\nOLD:\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=48222&start=3660#15\n\n!!!\nChange max_resolution to your max preferred resolution.\ne.g.\n1080 will result in 1080p video\n900 will result in 720p video"
+  "PornWorld_trailer-x-q-p": {
+    "link": "^pornworld\\.com/watch/[\\d-]+/.+",
+    "res": "<source src=\"([^\"]+)",
+    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nz4rch3\nOLD\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=48222&start=3780#21\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=48222&start=3660#15\n\n!!!\nChange max_resolution to your max preferred resolution.\ne.g.\n1080 will result in 1080p video\n900 will result in 720p video\n\nEXAMPLES\nhttps://pornworld.com/\nhttps://pornworld.com/model/100876/lia-lin"
   },
   "Positronica.ru-s": {
     "link": "^positronica\\.ru/product/.+",
@@ -3572,19 +3573,18 @@
     "to": "$1$2",
     "note": "Rodny\n\nПРИМЕРЫ\nhttps://questzone.ru/screenshots/9443/\nhttps://questzone.ru/solutions/deponiaj_1.php\nhttps://questzone.ru/solutions/eyeofaraj_3.php#15"
   },
-  "r34.sh-x": {
-    "link": "^(r34\\.sh/)(video)(/[a-f0-9-]{36}).*",
-    "loop": 1,
-    "url": "https://$1api/v1/$2s$3",
-    "res": ":\n$._=JSON.parse($._).hls_path\nreturn $._ ? '//cdn.'+$[1]+$._ : ''",
-    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/mw3my9n\n\nEXAMPLES\nhttps://r34.sh/?sort=newest&page=1&search=red\nhttps://r34.sh/?search=samus&sort=newest&page=1"
+  "QuestZone.ru_Albums": {
+    "link": "^(questzone\\.ru/)[^/]+/game(/\\d+).*",
+    "url": "https://$1screenshots$2/",
+    "res": ":\nreturn [...$._.matchAll(/<a href=\"\\/showpic\\.php\\?([^\"]+)/g)].map(i=>['//'+$[1]+i[1]])",
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nxyp8es\n\n!!!\nКурсор следует наводить на название альбома.\n\nEXAMPLES\nhttps://questzone.ru/screenshots/"
   },
   "Rambler.ru": {
-    "link": "^images\\.rambler\\.ru\\/.+image_url=([^&]+).*",
+    "link": "^(?:images\\.rambler\\.ru/.+image_url=([^&]+).*|news\\.rambler\\.ru/\\w+/\\d+-[\\w-]+/$)",
     "dc": 1,
     "img": "^([^/]+\\.rambler\\.ru/img/[^?]+).*",
-    "to": "$1",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/lglc7ii\nOLD\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1060#13\n\nПРИМЕРЫ\nhttps://news.rambler.ru/\nhttps://images.rambler.ru/search?query=blue"
+    "to": ":\nreturn $[1]||this.node.closest('[role=\"article\"]').querySelector('img').src.match(/^[^?]+/)[0]",
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nxz69h6\nOLD\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/lglc7ii\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1060#13\n\nПРИМЕРЫ\nhttps://news.rambler.ru/\nhttps://images.rambler.ru/search?query=cats"
   },
   "RanmaBooks-x": {
     "useimg": 1,
@@ -3677,7 +3677,7 @@
     "to": ":\nif (this.TRG?.hasAttribute(\"src\") && !this.TRG.src) {\n    this.TRG.src = this.TRG.getAttribute(\"src\");\n}\nreturn $[0].indexOf('format=mp4') > 0 ? $[0]+'#mp4' : 'i'+$[1]",
     "note": "hababr\nhttps://www.reddit.com/r/imagus/comments/1o0khf4/comment/nm1u9oy\nOLD\nhttps://www.reddit.com/r/imagus/comments/1f4dxjw/comment/lkyo1t4\n\n!!!\nIn the second field, you can choose which video should show the sieve - HLS or MP4.\nFor more details, see the FAQ, p.16.\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://old.reddit.com/r/all/\nhttps://www.reddit.com/domain/v.redd.it/new/\nhttps://www.reddit.com/r/videos/?feedViewType=cardView\nhttps://old.reddit.com/r/Grocerycost/comments/1cacltn/7512_in_berlingermany_single_but_i_regularly_get/"
   },
-  "Reddtastic-g": {
+  "Reddtastic-g-p": {
     "link": "^reddtastic/(.+)",
     "url": "https://www.reddit.com/by_id/t3_$1.json",
     "res": ":\n$=JSON.parse($._).data?.children?.[0]?.data;\n$=$.secure_media?.reddit_video?.hls_url||!/reddit\\.com\\/(?:r|u(?:ser)?)\\//.test($.url)&&$.url||$.preview?.reddit_video_preview?.dash_url||$.preview?.images?.[0]?.variants?.mp4?.source?.url||$.preview?.images?.[0]?.source?.url;\nreturn $?.length?/\\.gif\\b/.test($)?$:{loop:$}:''",
@@ -3832,8 +3832,8 @@
   "Rule34gen|Rule34Video|Rule34-videos-x-q-p": {
     "link": "^(rule34(video|-videos|gen)\\.(?:party|com))/videos?/(?:\\d+/.*?/|[\\w-]+/)",
     "url": ":(location.hostname===$[1]?'data:,':'')+$[0]",
-    "res": ":\nconst low_resolution_first = false\n\nif($.base[0]==='d'){\nconst x=platform.firefox ? new content.XMLHttpRequest() : new XMLHttpRequest();\nx.open('GET',$[0],false);\nx.send();\n$._=x.responseText;\n}\nif($[2]==='-videos')return {loop:$._.match(/\"contentUrl\":\\s*\"([^\"]+)/)?.[1]||''};\nlet title = /<title>([^<]+)/gm.exec($._)[1];\nfunction deobfuscate(r,t){let e=(r=r.split(\"/\").splice(2))[5],n=\"\",l=\"\";l=n=e.substring(0,32);let o=\"\";for(f=\"\",g=1;g<t.length;g++)f+=parseInt(t[g])?parseInt(t[g]):1;for(s=parseInt(f.length/2),$=parseInt(f.substring(0,s+1)),(g=(_=parseInt(f.substring(s)))-$)<0&&(g=-g),f=g,(g=$-_)<0&&(g=-g),f+=g,f*=2,f=\"\"+f,i=10,u=\"\",g=0;g<s+1;g++)for(h=1;h<=4;h++)(a=parseInt(t[g+h])+parseInt(f[g]))>=i&&(a-=i),u+=a;o=u;for(var s=l,$=l.length-1;$>=0;$--){for(var _=$,u=$;u<o.length;u++)_+=parseInt(o[u]);for(;_>=l.length;)_-=l.length;for(var a=\"\",b=0;b<l.length;b++)a+=b==$?l[_]:b==_?l[$]:l[b];l=a}return r[5]=e.replace(n,l),r.join(\"/\")}\nlet videovars = /var flashvars = ({[\\n].+});/gm.exec($._);\neval(\"videovars = \"+videovars[1]);\nlet l = low_resolution_first, urls = [];\nfor(el in videovars){\n   if(el.match(/^video.*?url\\d?$/)){\n      urls.push([deobfuscate(videovars[el], videovars.license_code)+'#mp4', videovars[el+'_text'] ? videovars[el+'_text'] : title]);\n   }\n}\nreturn [[[(!l?'#':'')+urls[urls.length-1][0],(l?'#':'')+urls[0][0]]]];",
-    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/ncv9k2c\nOLD\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/n1rufl8\nhttps://www.reddit.com/r/imagus/comments/19er8qu/comment/l7c83l6\n\n\n!!!\n- Для тех, у кого низкая скорость соединения или медленный прокси, в фильтре есть возможность установить качество видео SD вместо HD:\nconst low_resolution_first = true\n- Для Rule34gen нужен хороший американский прокси.\n==\nFor those with slow connection speeds or slow proxies, the sieve has an option to set the video quality to SD instead of HD:\nconst low_resolution_first = true\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://rule34video.com\nhttps://rule34-videos.com\nhttps://rule34gen.com"
+    "res": ":\nconst low_resolution_first = true\n\nif($.base[0]==='d'){\nconst x=platform.firefox ? new content.XMLHttpRequest() : new XMLHttpRequest();\nx.open('GET',$[0],false);\nx.send();\n$._=x.responseText;\n}\nif($[2]==='-videos')return {loop:$._.match(/\"contentUrl\":\\s*\"([^\"]+)/)?.[1]||''};\nlet title = /<title>([^<]+)/gm.exec($._)[1];\nfunction deobfuscate(r,t){let e=(r=r.split(\"/\").splice(2))[5],n=\"\",l=\"\";l=n=e.substring(0,32);let o=\"\";for(f=\"\",g=1;g<t.length;g++)f+=parseInt(t[g])?parseInt(t[g]):1;for(s=parseInt(f.length/2),$=parseInt(f.substring(0,s+1)),(g=(_=parseInt(f.substring(s)))-$)<0&&(g=-g),f=g,(g=$-_)<0&&(g=-g),f+=g,f*=2,f=\"\"+f,i=10,u=\"\",g=0;g<s+1;g++)for(h=1;h<=4;h++)(a=parseInt(t[g+h])+parseInt(f[g]))>=i&&(a-=i),u+=a;o=u;for(var s=l,$=l.length-1;$>=0;$--){for(var _=$,u=$;u<o.length;u++)_+=parseInt(o[u]);for(;_>=l.length;)_-=l.length;for(var a=\"\",b=0;b<l.length;b++)a+=b==$?l[_]:b==_?l[$]:l[b];l=a}return r[5]=e.replace(n,l),r.join(\"/\")}\nlet videovars = /var flashvars = ({[\\n].+});/gm.exec($._);\neval(\"videovars = \"+videovars[1]);\nlet l = low_resolution_first, urls = [];\nfor(el in videovars){\n   if(el.match(/^video.*?url\\d?$/)){\n      urls.push([deobfuscate(videovars[el], videovars.license_code)+'#mp4', videovars[el+'_text'] ? videovars[el+'_text'] : title]);\n   }\n}\nthis.CNT.filename=$._.match(/<span class=\"name\">([^<]+)/)?.[1]+' - '+$._.match(/<title>([^<]+)/)?.[1]\nreturn [[[(!l?'#':'')+urls[urls.length-1][0],(l?'#':'')+urls[0][0]]]];",
+    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nyk9wxg\nOLD\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/ncv9k2c\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/n1rufl8\n\n\n!!!\n- Для тех, у кого низкая скорость соединения или медленный прокси, в фильтре есть возможность установить качество видео SD вместо HD:\nconst low_resolution_first = true\n- Для Rule34gen нужен хороший американский прокси.\n==\nFor those with slow connection speeds or slow proxies, the sieve has an option to set the video quality to SD instead of HD:\nconst low_resolution_first = true\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://rule34video.com\nhttps://rule34-videos.com\nhttps://rule34gen.com"
   },
   "Rule34Hentai-x-p": {
     "useimg": 1,
@@ -3864,8 +3864,8 @@
   "RuTracker|Pornolab-x-p": {
     "link": "^(?:(?:rutracker\\.org|pornolab\\.net)/forum/(?:viewtopic|tracker)\\.php(?!.+&).+|rutracker_loop/(.+))",
     "url": ": $[1]||$[0]",
-    "res": ":\n// Get movie poster\nconst poster = !$[1] && [...$._.matchAll(/(?:\"postImg postImgAligned img-right\"|<div class=\"post-align\" style=\"text-align: center;\"[^&]+?) title=\"([^\"]+)/gs)].pop()?.[1];\n\n// Get page title\nconst title = $._.match(/title>([^<]+)/)?.[1]||'';\n\n// Get the part of the page source that contains image links\nconst linksSource = !$[1] && $._.match(/<(?:div class=\"sp-head folded\"><span|h3 class=\"sp-title\")>.+?<!--\\/post_body-->/s)?.[0];\n\n// Get image link URLs and their thumbnail URLs\nconst imgLinks = linksSource ? [...linksSource.matchAll(/<a href=\"(http[^\"]+)\" class=\"postLink\"><var class=\"postImg\" title=\"([^\"]+)/g)].map(i => [i[1], i[2]]) : [];\n\n// Get images that don't have a link to another page\nconst pageImgs = linksSource ? [...linksSource.matchAll(/(?<!class=\"postLink\">)<var class=\"postImg\" title=\"([^\"]+)/g)].map(i => ['', i[1]]) : [];\n\n// Combine image links and and images. Add links first since since some of the page images may not be wanted\nconst links = [...imgLinks, ...pageImgs]\n\nconst rt = this._rutracker_ || {};\nlet img, i = rt.num + 1 || 0, urls = rt.links || links, imgs = rt.imgs || (poster ? [[poster, title]] : []);\n\n// If the sieve has been looped with an image page, try to get the full size image\nif ($[1]) {\n  const thumbnail = urls[i-1][1];\n\n  // Test the links for which site it is and try to get the full size image from the page source\n  if($[1].includes('imageban.ru/'))img = $._.match(/data-original=\"([^\"]+)/)?.[1];\n  else if($[1].includes('fastpic.org/'))img = $._.match(/<img src=\"([^\"]+)\" class=\"image img-fluid\"/)?.[1];\n  else if($[1].includes('imagevenue.com/'))img = $._.match(/img src=\"([^\"]+)\" id=\"main-image\"/)?.[1];\n\n  // If site not supported, try to get the default page image\n  else img = $._.match(/property=\"og:image\" content=\"([^\"]+)/)?.[1];\n\n  imgs.push([[img||thumbnail], $[1]]);\n}\n\n// Run a for loop to test if the thumbnail can be upgraded to the full size image\nfor (; i < urls.length; ++i) {\n  let link = urls[i][0], thumbnail = urls[i][1];\n\n  // Fastpic page URLs look like image URLs interfering the the sieve looping. Try converting it to HTML URL\n  if(link.includes('.fastpic.org/'))link = link.replace(/^(https?:\\/\\/)i(\\d+)\\.(fastpic\\.org\\/)big(\\/\\d+\\/\\d+)\\/\\w+([^.]+\\.(?:jpe?|pn)g)$/, '$1$3view/$2$4$5.html');\n\n  // Test if another sieve can upgrade the thumbnail\n  img = this.find({src: thumbnail});\n  img = img!==thumbnail&&img;\n\n  // If the thumbnail can't be upgraded and the page link isn't an image URL, save the variables in 'this._rutracker_' and loop the sieve with the page URL\n  if (!img && link && !/\\.(?:jpe?|pn)g(?:\\?|$)/.test(link)){\n    this._rutracker_ = {\n      links: urls,\n      imgs: imgs,\n      num: i\n    }\n\n    // Add '//rutracker_loop/' to URL so it will match this sieve\n    return {loop: '//rutracker_loop/' + link};\n  }\n  imgs.push([[img||link, thumbnail], link]);\n}\n\n// Delete 'this._rutracker_' object\ndelete this._rutracker_;\nreturn imgs;",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/n08ebtu\nOLD\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1600#9\n\n\n!!!\n- показывает постер + скриншоты при наведении на название раздачи на форуме;\n- для работы данного фильтра необходимо расширение SMH (см.ЧаВо, п.12);\n- в начале на пару секунд фильтр показывает желтый спиннер, это нормально;\n- иногда (редко) требуется повторное наведение курсора;\n- фильтр поддерживает только наиболее крупные хостинги (90% раздач) - в остальных случаях он будет выдавать ошибку;\n\n\nПРИМЕРЫ\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1360#11"
+    "res": ":\n// Get movie poster\nconst poster = !$[1] && [...$._.matchAll(/(?:\"postImg postImgAligned img-right\"|<div class=\"post-align\" style=\"text-align: center;\"[^&]+?) title=\"(http[^\"]+)/gs)].pop()?.[1];\n\n// Get page title\nconst title = $._.match(/title>([^<]+)/)?.[1]||'';\n\n// Get the part of the page source that contains image links\nconst linksSource = !$[1] && $._.match(/<(?:div class=\"sp-head folded\"><span|h3 class=\"sp-title\")>.+?<!--\\/post_body-->/s)?.[0];\n\n// Get image link URLs and their thumbnail URLs\nconst imgLinks = linksSource ? [...linksSource.matchAll(/<a href=\"(http[^\"]+)\" class=\"postLink\"><var class=\"postImg\" title=\"([^\"]+)/g)].map(i => [i[1], i[2]]) : [];\n\n// Get images that don't have a link to another page\nconst pageImgs = linksSource ? [...linksSource.matchAll(/(?<!class=\"postLink\">)<var class=\"postImg\" title=\"([^\"]+)/g)].map(i => ['', i[1]]) : [];\n\n// Combine image links and and images. Add links first since since some of the page images may not be wanted\nconst links = [...imgLinks, ...pageImgs]\n\nconst rt = this._rutracker_ || {};\nlet img, i = rt.num + 1 || 0, urls = rt.links || links, imgs = rt.imgs || (poster ? [[poster, title]] : []);\n\n// If the sieve has been looped with an image page, try to get the full size image\nif ($[1]) {\n  const thumbnail = urls[i-1][1];\n\n  // Test the links for which site it is and try to get the full size image from the page source\n  if($[1].includes('imageban.ru/'))img = $._.match(/data-original=\"([^\"]+)/)?.[1];\n  else if($[1].includes('fastpic.org/'))img = $._.match(/<img src=\"([^\"]+)\" class=\"image img-fluid\"/)?.[1];\n  else if($[1].includes('imagevenue.com/'))img = $._.match(/img src=\"([^\"]+)\" id=\"main-image\"/)?.[1];\n\n  // If site not supported, try to get the default page image\n  else img = $._.match(/property=\"og:image\" content=\"([^\"]+)/)?.[1];\n\n  imgs.push([[img||thumbnail], $[1]]);\n}\n\n// Run a for loop to test if the thumbnail can be upgraded to the full size image\nfor (; i < urls.length; ++i) {\n  let link = urls[i][0], thumbnail = urls[i][1];\n\n  // Fastpic page URLs look like image URLs interfering the the sieve looping. Try converting it to HTML URL\n  if(link.includes('.fastpic.org/'))link = link.replace(/^(https?:\\/\\/)i(\\d+)\\.(fastpic\\.org\\/)big(\\/\\d+\\/\\d+)\\/\\w+([^.]+\\.(?:jpe?|pn)g)$/, '$1$3view/$2$4$5.html');\n\n  // Test if another sieve can upgrade the thumbnail\n  img = this.find({src: thumbnail});\n  img = img!==thumbnail&&img;\n\n  // If the thumbnail can't be upgraded and the page link isn't an image URL, save the variables in 'this._rutracker_' and loop the sieve with the page URL\n  if (!img && link && !/\\.(?:jpe?|pn)g(?:\\?|$)/.test(link)){\n    this._rutracker_ = {\n      links: urls,\n      imgs: imgs,\n      num: i\n    }\n\n    // Add '//rutracker_loop/' to URL so it will match this sieve\n    return {loop: '//rutracker_loop/' + link};\n  }\n  imgs.push([[img||link, thumbnail], link]);\n}\n\n// Delete 'this._rutracker_' object\ndelete this._rutracker_;\nreturn imgs;",
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nzbmvdb\nOLD\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/n08ebtu\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1600#9\n\n\n!!!\n- показывает постер + скриншоты при наведении на название раздачи на форуме;\n- для работы данного фильтра необходимо расширение SMH (см.ЧаВо, п.12);\n- в начале на пару секунд фильтр показывает желтый спиннер, это нормально;\n- иногда (редко) требуется повторное наведение курсора;\n- фильтр поддерживает только наиболее крупные хостинги (90% раздач) - в остальных случаях он будет выдавать ошибку;\n\n\nПРИМЕРЫ\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1360#11"
   },
   "RUTUBE.ru-h": {
     "link": "^rutube\\.ru/(?:video|shorts)/([a-f0-9]+)/.*",
@@ -3874,9 +3874,9 @@
     "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/lfbh47p\n\nПРИМЕРЫ\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1360#11"
   },
   "Safebooru|XBooru-x-p": {
-    "useimg": 1,
     "link": "^(?:safebooru\\.org|xbooru\\.com)/index\\.php\\?page=post&s=view&id=\\d+",
     "res": "src=\"(https?://(?:safe|(?:img\\.)?x)booru\\.[^/]+/+(?:imag|sampl)es/[^\"]+)",
+    "useimg": 1,
     "img": "^(safebooru\\.org/+)(?:sample|thumb(?:nail)?)s/(\\d+)/(?:thumbnail|sample)_([\\da-f]+)\\.([^?]+).*",
     "to": "#$1/images/$2/$3.#$4 png gif#\n$1/samples/$2/sample_$3.$4",
     "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/n4vjka0\nOLD\nhttps://www.reddit.com/r/imagus/comments/g7hwtc/safebooru_wont_load_png_files/\n\n\nEXAMPLES\nhttps://www.reddit.com/domain/safebooru.org/new/\nhttps://safebooru.org/index.php?page=post&s=list&tags=hifumi_(blue_archive)\nhttps://xbooru.com/index.php?page=post&s=list&tags=topless&pid=126"
@@ -3894,9 +3894,9 @@
   },
   "Sankaku.app-x-q-p": {
     "link": "^(?:beta\\.sankakucomplex\\.com|sankaku\\.app)/(?:\\w{2}/)?posts?/(?:show/)?(\\w+).*",
-    "url": ": this.no_auth?'https://chan.sankakucomplex.com/posts/show/'+$[1]:'data:,'+$[0]",
-    "res": ":\nconst access_token = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' // <- Put Access token here.\n\nif(/^data:/.test($.url[0])){\nif(access_token&&!/^x+$/.test(access_token)&&/sankaku(?:complex\\.com|\\.app)\\//.test(this.node.baseURI)){\nconst x = new XMLHttpRequest();\nx.open('Get','https://capi-v2.sankakucomplex.com/posts?lang=en&page=1&limit=1&tags=id_range:'+$[1],false);\nx.setRequestHeader(\"Authorization\",\"Bearer \"+access_token);\nx.send();\n$._=x.responseText;\nif(x.status!==200||!/sample_url/.test(x.responseText)){\nthis.no_auth = true\nreturn {loop:$[0]}\n}\n}else{\nthis.no_auth = true\nreturn {loop:$[0]}\n}\n}\nconsole.log($._)\nlet meta = document.querySelector('head > meta[name=\"referrer\"]');\nif (!meta) {\n    meta = document.createElement('meta');\n    meta.name = 'referrer';\n    meta.content = 'same-origin';\n    document.getElementsByTagName('head')[0].appendChild(meta);\n} else if (meta.attributes.content.value !== 'same-origin') {\n    meta.attributes.content.value = 'same-origin';\n}\nlet url;\n//if set to false, the largest possible media will be selected rather as opposed to web optimized media\nlet prefer_lowres=true;\nif(prefer_lowres){\n url = ($._.match(/(?:(?:sample|file)_url\": ?|(?:Original:\\s+<a\\s+|id=\"(?:low|high)res\"[^<>]+)href=)\"([^\"]+)/) || [])[1];\n}else{\n url = ($._.match(/(?:file_url\":\"?|(?:Original:\\s+<a\\s+|id=\"highres\"[^<>]+)href=\")([^(,\")]+)/) || [])[1];\n}\nreturn [url];",
-    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/1acru2t/comment/kjydxe2\nOLD\nhttps://www.reddit.com/r/imagus/comments/16gtfgu/comment/k0dobso\nhttps://www.reddit.com/r/imagus/comments/16gtfgu/fast_alt_chan_beta_sankakucomplex_sankaku_sieve/\n\n\n!!!\nOption to switch image size (in the third field from the top):\nlet prefer_lowres=\ntrue - web optimized / false - maximal\nBy default, the parameter is set false.\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://sankaku.app/?tags=user%3AGrenex\nhttps://beta.sankakucomplex.com/?tags=sex"
+    "url": "https://sankakuapi.com/posts/$1/fu",
+    "res": ":\n$=JSON.parse($._).data\nreturn [[['#'+$.file_url,$.sample_url]]]",
+    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/1q20wur/comment/nxeruuj\nOLD\nhttps://www.reddit.com/r/imagus/comments/1acru2t/comment/kjydxe2\nhttps://www.reddit.com/r/imagus/comments/16gtfgu/comment/k0dobso\n\n\n\n!!!\nOption to switch image size (in the third field from the top):\nlet prefer_lowres=\ntrue - web optimized / false - maximal\nBy default, the parameter is set false.\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://sankaku.app/?tab=explore\nhttps://sankaku.app/?tags=user%3AGrenex\nhttps://beta.sankakucomplex.com/?tags=sex"
   },
   "Saro-Knives.ru-s": {
     "link": "^saro-knives\\.ru/products/[\\w-]+",
@@ -3921,10 +3921,10 @@
     "to": "#$1$2\n$1-md$2",
     "note": "Rodny + Baton34V (fix)\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=48222&start=1540#12\n\nEXAMPLES\nhttps://screensider.com/#/album/115/page-4"
   },
-  "Scrolller-x-p-b": {
+  "Scrolller-x-p": {
     "link": "^scrolller\\.com/(?:[^_-]+[_-])+[a-z0-9]+$",
-    "res": ":\nconst media = m => {\nm=m.mediaSources;\nif(m.some(i=>/\\.mp4/.test(i.url)))return m.find(i=>/\\.mp4/.test(i.url)).url;\nlet l=m.filter(i=>i.height<1080).sort((a,b)=>b.height-a.height)[0]?.url;\nm=m.sort((a,b)=>b.height-a.height)[0]?.url;\nreturn m?.length?[[['#'+m,l]]]:'';\n}\n$=$._[0]==='{'?$._:$._.match(/{\\\\\"post\\\\\":({.+?})}\\]\\]\\\\n/)?.[1].replace(/(?<!\\\\)\\\\\"/g,'\"').replace(/\"\\]\\)<\\/script><script>self[^,]+,\"/g,'');\n$=$&&JSON.parse($);\nif($?.albumContent)return $.albumContent.map(media);\nreturn $ ? media($) : ''",
-    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/n1s92i9\nOLD\nhttps://www.reddit.com/r/imagus/comments/1aoy7k4/comment/l44rpq5\nhttps://www.reddit.com/r/imagus/comments/1aoy7k4/comment/kq7ii83\n\n\nEXAMPLES\nhttps://scrolller.com/\nhttps://scrolller.com/r/Witcher_NSFW\nhttps://scrolller.com/r/imaginarycosmere\nhttps://scrolller.com/r/Witcher_NSFW?filter=albums\nhttps://scrolller.com/r/Witcher_NSFW?filter=videos"
+    "res": ":\nconst media = m => {\nm=m.mediaSources;\nif(m.some(i=>/\\.mp4/.test(i.url)))return m.find(i=>/\\.mp4/.test(i.url)).url;\nlet l=m.filter(i=>i.height<1080).sort((a,b)=>b.height-a.height)[0]?.url;\nm=m.sort((a,b)=>b.height-a.height)[0]?.url;\nreturn m?.length?[[['#'+m,l]]]:'';\n}\n$=$._.match(/[{,]\\\\\"post\\\\\":({.+?})}\\]\\]\\\\n/)?.[1].replace(/(?<!\\\\)\\\\\"/g,'\"').replace(/\"\\]\\)<\\/script><script>self[^,]+,\"/g,'');\n$=$&&JSON.parse($);\nreturn $ ? $.albumContent?.map(media) || media($) : ''",
+    "note": "imqswt\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/nz4rch3\nOLD\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/n1s92i9\nhttps://www.reddit.com/r/imagus/comments/1aoy7k4/comment/l44rpq5\n\n\n\nEXAMPLES\nhttps://scrolller.com/\nhttps://scrolller.com/r/Witcher_NSFW\nhttps://scrolller.com/r/imaginarycosmere\nhttps://scrolller.com/r/Witcher_NSFW?filter=albums\nhttps://scrolller.com/r/Witcher_NSFW?filter=videos"
   },
   "SeaArt-g-p": {
     "link": "^(seaart\\.ai)/(artWorkD|explore/d|models/d)etail/([^\\/?]+)",
@@ -5184,18 +5184,18 @@
     "to": "$&#mp4",
     "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1pvkqip/comment/nwbt51v\n\n!!!\n- Поддержка воспроизведения видео-файлов с локального диска в браузере;\n- Данный фильтр должен находиться ПЕРЕД фильтром [LinkedMedia].\n==\n- Support for playing video files from a local drive in a browser;\n- This sieve must be placed BEFORE the [LinkedMedia] sieve."
   },
-  "[Local_Files]": {
-    "link": "^file:///.+",
-    "url": ": (()=>{if($[0].length>=location.href.length)throw '';return 'data:,'+$[0]})()",
-    "res": ":\nreturn [...document.getElementsByClassName('file')].map(i=>[i.href,i.href.match(/[^\\/]+$/)?.[0]||'']).filter(([i])=>/\\.(?:jp(?:g|eg?)|heic|3gp|a?png|gif|web[pm]|bmp|xbm|pict|j(?:if|fif?)|flv|m2ts|mkv|mov|mpeg|mpg|og[gv]|mp[34]|m4[va]|svgz?|ts|rm|wm[va])/.test(i)).map(i=>/m[ok]v|ts|flv/.test(i[0]) ? [i[0]+'#mp4',i[1]] : [i[0],i[1]]);",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1pvkqip/comment/nvxqvhm/\nOLD\nhttps://www.reddit.com/r/imagus/comments/1g1f2d2/comment/ls0e822\n\n!!!\n- Если перенести папку с медиа (изображения иили видео) из файлового браузера на вкладку браузера, Имагус будет работать на этой вкладке с локальными ссылками. При наведении на \"Родительский каталог\" будет показано все содержимое папки в виде альбома;\n- Данный фильтр должен находиться ПЕРЕД фильтром [LinkedMedia].\n==\n- If you move a folder with media (images or videos) from file browser to a browser tab, Imagus will work on that tab with local links. Hovering over “Parent Catalog” will show the entire contents of the folder as an album;\n- This sieve must be placed BEFORE the [LinkedMedia] sieve."
-  },
   "[LinkedMedia]": {
     "link": "^[^?#]{6,4096}\\.(?:jp(?:g|eg?)|heic|3gp|a?png|gif|web[pm]|bmp|xbm|pict|j(?:if|fif?)|flv|m2ts|mkv|mov|mpeg|mpg|og[gv]|mp[34]|m4[va]|svgz?|ts|rm|wm[va])(?:$|[?#]).*",
     "ci": 3,
     "img": "^[^?#]{6,4096}\\.(?:jp(?:g|eg?)|heic|3gp|a?png|gif|web[pm]|bmp|xbm|pict|j(?:if|fif?)|flv|m2ts|mkv|mov|mpeg|mpg|og[gv]|mp[34]|m4[va]|svgz?|ts|rm|wm[va])(?:$|[?#]).*",
     "to": ":\nconst disable_on_video = false\n\nif (location.hostname === 'www.google.com') return '';\nconst n = this.node;\nif ( disable_on_video && n?.nodeName === 'VIDEO') return '';\nif (!disable_on_video && n?.nodeName === 'VIDEO') n.title = 'Imagus activating on videos can be disabled in the [LinkedMedia] sieve';\n\nif (!RegExp.prototype.test_original) {\n  /* workaround for Imagus bug, force RexExp.test to ignore case */\n  RegExp.prototype.test_original = RegExp.prototype.test;\n  RegExp.prototype.test = function(str) {\n    if (this.source?.startsWith(\"^[^?#]+\\\\.\")) {\n      return (new RegExp(this.source, 'i')).test_original(str)\n    } else {\n      return this.test_original(str)\n    }\n  }\n}\n\n// width and height of the tagret element should be more that 39px\nif (this.TRG?.localName !== 'a' && \n    this.TRG?.clientWidth && this.TRG?.clientWidth < 40 && \n    this.TRG?.clientHeight && this.TRG?.clientHeight < 40)\n{\n    return '';\n}\n\n// Imagus fix\nif (this.TRG?.hasAttribute(\"src\") && !this.TRG.src) {\n    this.TRG.src = this.TRG.getAttribute(\"src\");\n}\n\nreturn $[0];",
     "note": "hababr\nhttps://www.reddit.com/r/imagus/comments/1f4dxjw/comment/lkty6h3\nOLD\nhttps://www.reddit.com/r/imagus/comments/1em6o9c/comment/lgwseyq\nhttps://www.reddit.com/r/imagus/comments/1dvfa8n/comment/lbpyemi\nhttps://www.reddit.com/r/imagus/comments/1blyg8c/comment/kwbchh9\n\n\n!!!\nЭтот универсальный фильтр реагирует на расширения файлов в ссылках и пытается загрузить изображение, если находит ссылку на медиафайл.\n==\nThis universal sieve reacts to file extensions on links and tries to launch Imagus if it finds a link to a media file.\n\n\nEXAMPLES\nhttps://www.photo.net/search/?q=yellow&quick=1\nhttps://code.visualstudio.com/updates/v1_87"
+  },
+  "[Local_Files]": {
+    "link": "^file:///.+",
+    "url": ": (()=>{if($[0].length>=location.href.length)throw '';return 'data:,'+$[0]})()",
+    "res": ":\nreturn [...document.getElementsByClassName('file')].map(i=>[i.href,i.href.match(/[^\\/]+$/)?.[0]||'']).filter(([i])=>/\\.(?:jp(?:g|eg?)|heic|3gp|a?png|gif|web[pm]|bmp|xbm|pict|j(?:if|fif?)|flv|m2ts|mkv|mov|mpeg|mpg|og[gv]|mp[34]|m4[va]|svgz?|ts|rm|wm[va])/.test(i)).map(i=>/m[ok]v|ts|flv/.test(i[0]) ? [i[0]+'#mp4',i[1]] : [i[0],i[1]]);",
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1pvkqip/comment/nvxqvhm/\nOLD\nhttps://www.reddit.com/r/imagus/comments/1g1f2d2/comment/ls0e822\n\n!!!\n- Если перенести папку с медиа (изображения иили видео) из файлового браузера на вкладку браузера, Имагус будет работать на этой вкладке с локальными ссылками. При наведении на \"Родительский каталог\" будет показано все содержимое папки в виде альбома;\n- Данный фильтр должен находиться ПЕРЕД фильтром [LinkedMedia].\n==\n- If you move a folder with media (images or videos) from file browser to a browser tab, Imagus will work on that tab with local links. Hovering over “Parent Catalog” will show the entire contents of the folder as an album;\n- This sieve must be placed BEFORE the [LinkedMedia] sieve."
   },
   "[phpGraphy]": {
     "img": "^([^/]+/(?:[^/]+/)*?index\\.php\\?)(?:display(?:pic)?|previewpic)=([^&]+).*",
