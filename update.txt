@@ -21,7 +21,7 @@
     "res": ":\nthis.TRG.IMGS_ext_data = [\n  '//' + 'data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"640\" height=\"360\"></svg>',\n  `<imagus-extension type=\"videojs\" url=\"${$[0]}\"></imagus-extension>Video`\n]\nreturn 'imagus://extension'",
     "note": "64h + hababr (edit)\nhttps://pastebin.com/GsvneF9L\nOLD\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=2560#11\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1484&limit=1&m=3#1\n\n!!!\nДинамически загружаемый Video.js (https://github.com/videojs/video.js), поддерживающий HLS, DASH и выбор разрешения.\n+\nNB! - Может вызвать проблемы с видео на Реддит (перехватывает интерфейс плеера), поэтому должен находиться ниже фильтра Reddit_video|v.redd.it\n==\nDynamically loaded Video.js (https://github.com/videojs/video.js), supporting HLS, DASH and resolution selection.\n+\nNB! - May cause problems with the video on Reddit (intercepts the player interface), so it should be below the Reddit_video|v.redd.it sieve.\n\nПРИМЕРЫ / EXAMPLES\nhttps://forum.ru-board.com/topic.cgi?forum=5&topic=50874&start=1480#6"
   },
-  "[Extension]-q": {
+  "[EXT]-q": {
     "link": "^imagus:\\/\\/extension",
     "loop": 1,
     "url": ":'data:,' + this.TRG.IMGS_c_resolved.URL",
@@ -2371,15 +2371,15 @@
     "img": "^kick\\.com/category/.+",
     "loop": 2,
     "to": ":\n$=this.node.closest('[class=\"group/card relative flex w-full shrink-0 grow-0 flex-col gap-2 lg:gap-0\"]')?.querySelector('img')?.src?.match(/clip_\\w+/)?.[0];\nreturn $ ? '//kick.com/?clip='+$ : ''",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/ln1vfvq\nOLD\nhttps://www.reddit.com/r/imagus/comments/15gc9ia/comment/jva48dp\nhttps://www.reddit.com/r/imagus/comments/15gc9ia/updated_kickcom_clip_sieve\n\n\n!!!\n- Курсор следует наводить не только на обложку видео, но и на название ролика или на название самого канала (над названием)\n- На странице клипов Imagus не может работать на ссылке или обложке клипа. Курсор следует наводить на категорию или дату (это тоже ссылки) под названием клипа.\n==\n- The cursor should be placed not only on the cover of the video, but also on the title of the video or the name of channel itself (above the title)\n- On the clips page, Imagus cannot work on the link or cover of a clip. The cursor should be placed on the category or date (these are also links) below the clip name.\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://kick.com/category/irl\nhttps://kick.com/actuallymanik/clips\nhttps://kick.com/actuallymanik/videos\nhttps://www.reddit.com/domain/kick.com/new/\nhttps://www.reddit.com/r/imagus/comments/15gc9ia/comment/juj1jjy"
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/ln1vfvq\nOLD\nhttps://www.reddit.com/r/imagus/comments/15gc9ia/comment/jva48dp\nhttps://www.reddit.com/r/imagus/comments/15gc9ia/updated_kickcom_clip_sieve\n\n\n!!!\n- Курсор следует наводить не только на обложку видео, но и на название ролика или на название самого канала (над названием);\n- На странице клипов Imagus не может работать на ссылке или обложке клипа. Курсор следует наводить на категорию или дату (это тоже ссылки) под названием клипа.\n==\n- The cursor should be placed not only on the cover of the video, but also on the title of the video or the name of channel itself (above the title);\n- On the clips page, Imagus cannot work on the link or cover of a clip. The cursor should be placed on the category or date (these are also links) below the clip name.\n\n\nПРИМЕРЫ / EXAMPLES\nhttps://kick.com/category/irl\nhttps://kick.com/actuallymanik/clips\nhttps://kick.com/actuallymanik/videos\nhttps://www.reddit.com/domain/kick.com/new/\nhttps://www.reddit.com/r/imagus/comments/15gc9ia/comment/juj1jjy"
   },
   "KICK_Live": {
     "link": "^kick\\.com/(?!about|category|browse)[\\w-]+$",
     "loop": 3,
-    "res": "\"([^\"]+\\.m3u8[^\"]+)\\\\\"",
+    "res": ",([^,\"]+?\\.m3u8[^\",]+)\"",
     "img": "^(images\\.kick\\.com/video_thumbnails/.+)",
     "to": ":\nconst re=new RegExp(`${$[1].replaceAll('.','\\\\.')} \\\\d+w[^<]+?\\\\\\\\\"playback_url\\\\\\\\\":\\\\\\\\\"([^\"]+)\\\\\\\\\"`);\nreturn document.body.outerHTML.match(re)?.[1]||''",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/lonuess\n\nEXAMPLES\nhttps://kick.com/browse\nhttps://kick.com/browse/gambling\nhttps://kick.com/category/irl\nhttps://kick.com/category/valorant"
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1tdxdjz/comment/om15qjj\nOLD\nhttps://www.reddit.com/r/imagus/comments/z0zyox/comment/lonuess\n\n\n!!!\n- курсор следует пытаться наводить не только на обложку видео, но и на название аккаунта;\n- для некоторых видео может потребоваться VPN (в РФ).\n==\n- you should try to point the cursor not only at the cover of the video, but also at the account name.\n\n\nEXAMPLES\nhttps://kick.com/browse\nhttps://kick.com/browse/gambling\nhttps://kick.com/category/irl\nhttps://kick.com/category/valorant"
   },
   "KICK_VoD-q": {
     "link": "^(kick\\.com/)(?:[^/]+/)*videos?/([a-zA-Z0-9-]+).*",
@@ -4882,7 +4882,7 @@
     "res": ":\nconst use_sidebar = true\n\n$=JSON.parse($._.match(/__INITIAL_STATE__\\s*=\\s*({.+?})<\\//)[1].replace(/:undefined/g,':\"\"')).note.noteDetailMap[$[1]].note;\nconst t=[$.title,$.user?.nickname,new Date($.time).toLocaleDateString(),$.desc].filter(Boolean).join(use_sidebar?'\\n':' | ');\n$=($.video?.media?.stream?.h264||$.imageList||[]).map((i,n)=>[i.urlDefault||i.masterUrl,!n?t:'']);\nif(use_sidebar){\n$[0][1]=`<imagus-extension type=\"sidebar\">${t}</imagus-extension>`;\nthis.TRG.IMGS_ext_data=$;\n}\nreturn use_sidebar?{loop:'imagus://extension'}:$",
     "img": "^(sns-(?:avatar|webpic)-qc\\.xhscdn\\.com/[^?]+).*",
     "to": "$1",
-    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1artw9b/comment/kr34nny\n\n\n!!!\nHow to turn on / disable sidebar:\nconst use_sidebar = true / false\n\n\nEXAMPLES\nhttps://www.xiaohongshu.com/explore"
+    "note": "Imagus_fan\nhttps://www.reddit.com/r/imagus/comments/1artw9b/comment/kr34nny\n\n\n!!!\nHow to turn on/off the sidebar:\nconst use_sidebar = true / false\n\n\nEXAMPLES\nhttps://www.xiaohongshu.com/explore\nhttps://www.xiaohongshu.com/user/profile/6800fe72000000000e013ffa"
   },
   "xkcd": {
     "link": "^(?:m\\.)?(xkcd\\.(?:org|com)/\\d{1,5})/?$",
